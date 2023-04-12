@@ -19,54 +19,72 @@ import com.greedy.springjpa.menu.repository.MenuRepository;
 
 @Service
 public class MenuService {
-	
+
 	private MenuRepository menuRepository;
 	private ModelMapper modelMapper;
-	@PersistenceContext	// 스프링 부트가 영속성 컨텍스트를 관리하는 엔티티 매니저를 주입한다.
+	@PersistenceContext // 스프링 부트가 영속성 컨텍스트를 관리하는 엔티티 매니저를 주입한다.
 	private EntityManager entityManager;
-	
+
 	@Autowired
 	public MenuService(MenuRepository menuRepository, ModelMapper modelMapper) {
 		this.menuRepository = menuRepository;
 		this.modelMapper = modelMapper;
 	}
-	
+
 	public List<MenuDTO> findAllMenu() {
-		
+
 		List<Menu> menuList = menuRepository.findAllMenu(entityManager);
-		
+
 		return menuList.stream().map(menu -> modelMapper.map(menu, MenuDTO.class)).collect(Collectors.toList());
 	}
 
-	
+	public MenuDTO findMenuByCode(int menuCode) {
+
+		return modelMapper.map(menuRepository.findMenuByCode(entityManager, menuCode), MenuDTO.class);
+	}
+
 	public List<MenuDTO> searchMenu(String keyword) {
-		
+
 		List<Menu> menuList = menuRepository.searchMenu(entityManager, keyword);
-		
+
 		return menuList.stream().map(row -> modelMapper.map(row, MenuDTO.class)).collect(Collectors.toList());
-		
+
+	}
+
+	public List<CategoryDTO> findAllCategory() {
+
+		List<Category> categoryList = menuRepository.findAllCategory(entityManager);
+
+		return categoryList.stream().map(row -> modelMapper.map(row, CategoryDTO.class)).collect(Collectors.toList());
+	}
+
+	@Transactional
+	public void registNewMenu(MenuDTO newMenu) {
+
+		menuRepository.registNewMenu(entityManager, modelMapper.map(newMenu, Menu.class));
+
 	}
 
 	@Transactional
 	public void deleteMenu(MenuDTO deletedMenu) {
-		
+
 		menuRepository.deleteMenu(entityManager, modelMapper.map(deletedMenu, Menu.class));
-		
+
 	}
-	
+
 	@Transactional
 	public void modifyPriceMenu(MenuDTO menu) {
-		
+
 		menuRepository.modifyPriceMenu(entityManager, modelMapper.map(menu, Menu.class));
-		
+
 	}
 
 	public MenuDTO getMenuName(MenuDTO menu) {
-		
+
 		Menu menuList = menuRepository.getMenuName(entityManager, modelMapper.map(menu, Menu.class));
-		
+
 		MenuDTO menuList2 = modelMapper.map(menuList, MenuDTO.class);
-		
+
 		return menuList2;
 	}
 

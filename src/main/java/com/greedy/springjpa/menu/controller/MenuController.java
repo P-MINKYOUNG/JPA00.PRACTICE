@@ -36,6 +36,34 @@ public class MenuController {
 		return "menu/list";
 	}
 	
+	@GetMapping("/{menuCode}")
+	public String findMenuByCode(@PathVariable int menuCode, Model model) {
+		
+		MenuDTO menu = menuService.findMenuByCode(menuCode);
+		System.out.println("menu = " + menu);
+		
+		model.addAttribute("menu", menu);
+		
+		return "menu/one";
+	}
+	
+	@GetMapping("/regist")
+	public void registPage() {}
+	
+	@GetMapping(value="category", produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public List<CategoryDTO> findCategoryList(){
+		return menuService.findAllCategory();
+	}
+	
+	@PostMapping("/regist")
+	public String registMenu(@ModelAttribute MenuDTO newMenu) {
+		
+		menuService.registNewMenu(newMenu);
+		
+		return "redirect:/menu/list";
+	}
+	
 	@GetMapping("/search")
 	public void searchPage() {}
 	
@@ -77,5 +105,12 @@ public class MenuController {
 	public MenuDTO getMenuName(@ModelAttribute MenuDTO menu){
 		
 		return menuService.getMenuName(menu);
+	}
+	
+	@GetMapping(value="deleteMenu", produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public List<MenuDTO> findDeleteMenu(){
+		
+		return menuService.findAllMenu();
 	}
 }

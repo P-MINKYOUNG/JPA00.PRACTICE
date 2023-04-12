@@ -8,8 +8,10 @@
 <body>
 	
 	<form action="/menu/modifyPrice" method="post">
-		<label>수정할 메뉴 코드 : </label>
-		<input type="number" name="menuCode" id="menuCode">
+		<label>수정할 메뉴 코드</label>
+		<select name="menuCode" id="menuCode">
+		
+		</select>
 		<label>수정할 가격 : </label>
 		<input type="number" name="menuPrice">
 		<input type="hidden" id="menuName">
@@ -17,6 +19,27 @@
 	</form>
 	
 	<script>
+	$(function(){
+		$.ajax({
+			url : '/menu/deleteMenu',
+			success : function(data){
+				console.log(data);
+				
+				let html = '';
+				
+				for(let index in data){
+					html += `<option value='${data[index].menuCode}'>${data[index].menuCode}</option>`;
+				}
+				
+				document.querySelector("#menuCode").insertAdjacentHTML('beforeend', html);
+			},
+			error : function(xhr){
+				console.log(xhr);
+			}
+		});
+	})
+	
+	
 	$("#menuCode").on("change", function(){
         
         let menuCode =$("#menuCode").val(); 
