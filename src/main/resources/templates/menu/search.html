@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="https://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<h1 align="center">메뉴 검색(메뉴 이름 키워드 검색)</h1>
+		<label>키워드 : </label>
+		<input type="text" name="keyword">
+		<button id="search">검색</button>
+		
+		
+	<script>
+    document.getElementById("search").addEventListener("click", function() {
+        let keyword = document.getElementsByName("keyword")[0].value;
+        location.href="/menu/searchMenu?keyword=" + keyword;
+    });
+</script>
+
+</body>
+</html>

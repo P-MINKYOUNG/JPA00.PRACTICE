@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+<body>
+	
+	<form action="/menu/modifyPrice" method="post">
+		<label>수정할 메뉴 코드 : </label>
+		<input type="number" name="menuCode" id="menuCode">
+		<label>수정할 가격 : </label>
+		<input type="number" name="menuPrice">
+		<input type="hidden" id="menuName">
+		<input type="submit" value="수정" id="submit">
+	</form>
+	
+	<script>
+	$("#menuCode").on("change", function(){
+        
+        let menuCode =$("#menuCode").val(); 
+        
+        $.ajax({
+           
+           url : '/menu/menuName',
+           data: {
+              menuCode: menuCode
+           },
+           success : function(data){
+              document.querySelector("#submit").addEventListener("click", () => {
+            	  let price = document.getElementsByName("menuPrice")[0].value;
+            	  alert(data.menuName + "의 가격을 " + price + "원 으로 수정합니다. ");
+              })
+           },
+           error : function(xhr){
+              console.log(xhr);
+           }
+           
+        })
+        
+     });
+	</script>
+	
+</body>
+</html>
